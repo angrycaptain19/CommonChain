@@ -60,23 +60,22 @@ def register():
 
 @app.route("/login" , methods={'GET','POST'})
 def login():
-    if request.method == 'POST':
-        username=request.form['username']
-        password=request.form['password']
-        users = table("users", "Name", "Email", "username", "password")
-        user = users.getone("username", username)
-        check=user.get('password')
-        if check is None:
-            print("here")
-            return "user Not found"  #Flash messages to be incoporated
-        if check==password:
-            log_in(username)
-            return redirect(url_for('dashboard'))
-        else:
-            return "invalid password" #flash message
+    if request.method != 'POST':
+        return render_template('login.html')
+    username=request.form['username']
+    password=request.form['password']
+    users = table("users", "Name", "Email", "username", "password")
+    user = users.getone("username", username)
+    check=user.get('password')
+    if check is None:
+        print("here")
+        return "user Not found"  #Flash messages to be incoporated
+    if check != password:
+        return "invalid password" #flash message
 
 
-    return render_template('login.html')
+    log_in(username)
+    return redirect(url_for('dashboard'))
 
 @app.route("/logout")
 @is_logged_in
