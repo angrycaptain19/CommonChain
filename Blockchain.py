@@ -1,11 +1,9 @@
 from hashlib import sha256
 
 def updatehash(*args):
-    hashing_text = ""; h = sha256()
+    h = sha256()
 
-    for arg in args:
-        hashing_text += str(arg)
-
+    hashing_text = "".join(str(arg) for arg in args)
     h.update(hashing_text.encode('utf-8'))
     return h.hexdigest()
 
